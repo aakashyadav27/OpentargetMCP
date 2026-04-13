@@ -62,7 +62,8 @@ pytest tests/
 
 ## 🤖 Usage with AI Agents
 
-To use this with an MCP-compatible agent (like Claude Desktop or Cursor), add the following to your configuration:
+### Option A: Automatic Setup (Recommended)
+This method tells the AI client (Claude Desktop, Cursor, etc.) to start the server for you in the background.
 
 ```json
 {
@@ -77,6 +78,25 @@ To use this with an MCP-compatible agent (like Claude Desktop or Cursor), add th
   }
 }
 ```
+
+### Option B: Remote / Manual Setup
+Use this if you are running the server manually in a terminal or on a remote machine.
+
+1. **Start the server:**
+   ```bash
+   export PYTHONPATH=.
+   python3 server.py
+   ```
+2. **Add this to your config:**
+   ```json
+   {
+     "mcpServers": {
+       "opentarget": {
+         "url": "http://127.0.0.1:8000/mcp"
+       }
+     }
+   }
+   ```
 
 ---
 
