@@ -1,50 +1,64 @@
 # Open Targets MCP Server 🧬
 
-A powerful, workflow-oriented Model Context Protocol (MCP) server for therapeutic discovery and drug repurposing. This server provides a seamless bridge between agentic AI platforms and the [Open Targets Platform](https://platform.opentargets.org/), leveraging its comprehensive GraphQL API.
+A professional-grade, workflow-oriented Model Context Protocol (MCP) server for therapeutic discovery and drug repurposing. This server provides a seamless bridge between agentic AI platforms and the [Open Targets Platform](https://platform.opentargets.org/), leveraging its comprehensive GraphQL API.
 
-## 🚀 Features
+---
 
-The server implements a suite of specialized tools for automated drug discovery:
+## 🚀 Key Features
 
-*   **Entity Resolution**: Resolve common names (e.g., 'BRCA2', 'aspirin', 'asthma') to standardized identifiers (Ensembl, ChEMBL, EFO).
-*   **Target Prioritization**: Retrieve top associated targets for any disease, ranked by multi-faceted association scores.
-*   **Safety Assessments**: Quickly pull safety liabilities, toxicities, and risk information for gene/protein targets.
-*   **Pharmacovigilance**: Access statistical FDA FAERS data (adverse events) for known drugs using log-likelihood ratios.
-*   **Druggability Analysis**: View comprehensive tractability summaries for targets across multiple modalities (Small Molecule, Antibody, etc.).
-*   **Disease Phenotyping**: Map diseases to their clinical signs and symptoms using the Human Phenotype Ontology (HPO).
-*   **Cancer Profiling**: Retrieve cancer hallmarks (COSMIC) and gene essentiality scores from the Cancer Dependency Map (DepMap).
-*   **Animal Models**: Access significant phenotypes observed in biological mouse models for human targets.
+*   **Modular Architecture**: Built with a clean separation of concerns (Clients, Tools, Models) following the Top 1% MCP standard.
+*   **Type-Safe Validation**: Powered by **Pydantic** to ensure 100% reliable data structures for AI consumption.
+*   **Workflow-Oriented Tools**: Abstracted complex queries into high-level therapeutic workflows (Cancer profiling, Safety, Tractability).
+*   **Modern Transport**: Supports the latest **Streamable-HTTP** transport layer.
+*   **Automated Testing**: Integrated `pytest` suite for verified API reliability.
 
-## 🛠 Tech Stack
+---
 
-*   **Core**: Python 3.10+
-*   **MCP Framework**: [FastMCP](https://github.com/jlowin/fastmcp)
-*   **API Interface**: Open Targets GraphQL API (v4)
-*   **Runtime**: HTTP/Streamable transport for modern agentic platforms.
+## 🏗 Repository Structure
 
-## 📦 Installation & Setup
+```text
+├── src/
+│   └── opentarget_mcp/
+│       ├── clients/       # GraphQL & API Communication
+│       ├── tools/         # Domain-specific logic (Analysis, Cancer, etc.)
+│       ├── models/        # Pydantic data validation classes
+│       └── server.py      # Modular server initialization
+├── tests/                 # Automated test suite (pytest)
+├── server.py              # Root entry point
+└── requirements.txt       # Optimized dependencies
+```
 
-1. **Clone the repository**:
-   ```bash
-   git clone <repository-url>
-   cd OpentargetMCP
-   ```
+---
 
-2. **Create and activate a virtual environment**:
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   ```
+## 🛠 Installation & Setup
 
-3. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 1. Clone & Environment
+```bash
+git clone https://github.com/aakashyadav27/OpentargetMCP.git
+cd OpentargetMCP
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
 
-4. **Run the server**:
-   ```bash
-   python server.py
-   ```
+### 2. Run the Server
+```bash
+export PYTHONPATH=$PYTHONPATH:.
+python3 server.py
+```
+The server will start using the **Streamable-HTTP** transport, listening at `http://127.0.0.1:8000/mcp`.
+
+---
+
+## 🧪 Testing
+
+This project includes a comprehensive test suite to ensure API compliance.
+```bash
+export PYTHONPATH=$PYTHONPATH:.
+pytest tests/
+```
+
+---
 
 ## 🤖 Usage with AI Agents
 
@@ -54,19 +68,17 @@ To use this with an MCP-compatible agent (like Claude Desktop or Cursor), add th
 {
   "mcpServers": {
     "opentarget": {
-      "command": "python",
-      "args": ["/path/to/OpentargetMCP/server.py"]
+      "command": "python3",
+      "args": ["/absolute/path/to/OpentargetMCP/server.py"],
+      "env": {
+        "PYTHONPATH": "/absolute/path/to/OpentargetMCP"
+      }
     }
   }
 }
 ```
 
-## 📜 Example Questions
-
-*   "Find repurposing candidates for Imatinib and identify its top associated diseases."
-*   "What are the top therapeutic targets for Alzheimer's and their safety profiles?"
-*   "Check the cancer essentiality of KRAS across various tissues."
-*   "What are the clinical signs of Parkinson's Disease according to HPO?"
+---
 
 ## 📄 License
 MIT License
