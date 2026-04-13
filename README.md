@@ -1,5 +1,8 @@
 # Open Targets MCP Server 🧬
 
+[![License](https://img.shields.io/github/license/aakashyadav27/OpentargetMCP)](https://github.com/aakashyadav27/OpentargetMCP/blob/main/LICENSE)
+[![Commit Activity](https://img.shields.io/github/last-commit/aakashyadav27/OpentargetMCP)](https://github.com/aakashyadav27/OpentargetMCP/commits/main)
+
 A professional-grade, workflow-oriented Model Context Protocol (MCP) server for therapeutic discovery and drug repurposing. This server provides a seamless bridge between agentic AI platforms and the [Open Targets Platform](https://platform.opentargets.org/), leveraging its comprehensive GraphQL API.
 
 ---

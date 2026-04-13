@@ -1,10 +1,18 @@
 from fastmcp import FastMCP
-from .tools import discovery, analysis, phenotypes, cancer
+from .tools import discovery, analysis, phenotypes, cancer, schema
 
 def create_server():
     mcp = FastMCP("Open Targets Specialist 🧬")
 
-    # Discovery Tools
+    # Discovery & Schema Tools
+    @mcp.tool()
+    async def get_schema_info():
+        """
+        Returns high-level information about the Open Targets GraphQL schema.
+        Use this tool to explore available data fields.
+        """
+        return await schema.get_schema_info()
+
     @mcp.tool()
     async def resolve_id(query: str, entity_type: str = None):
         """Resolves a common name to its standardized Open Targets ID."""
