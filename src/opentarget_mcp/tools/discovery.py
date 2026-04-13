@@ -1,6 +1,7 @@
 from ..clients.graphql import query_graphql
+from ..models.responses import DiscoveryResult
 
-async def resolve_id(query: str, entity_type: str = None):
+async def resolve_id(query: str, entity_type: str = None) -> DiscoveryResult:
     """Resolves a common name to a standardized Open Targets ID."""
     gql_query = """
     query Search($queryString: String!, $entityNames: [String!]) {
@@ -18,7 +19,8 @@ async def resolve_id(query: str, entity_type: str = None):
         variables["entityNames"] = [entity_type]
         
     data = await query_graphql(gql_query, variables)
-    return {"hits": data.get("search", {}).get("hits", [])[:5]}
+    hits = data.get("search", {}).get("hits", [])[:5]
+    return DiscoveryResult(hits=hits)
 
 async def get_prioritized_targets(disease_id: str, limit: int = 20):
     """Returns top associated targets for a given disease ID."""

@@ -1,6 +1,7 @@
 from ..clients.graphql import query_graphql
+from ..models.responses import SafetyProfileResponse, TractabilityResponse, AdverseEventsResponse
 
-async def get_safety_profile(target_id: str):
+async def get_safety_profile(target_id: str) -> SafetyProfileResponse:
     """Retrieves safety liabilities and toxicities for a specific target."""
     gql_query = """
     query TargetSafety($ensemblId: String!) {
@@ -21,14 +22,14 @@ async def get_safety_profile(target_id: str):
     data = await query_graphql(gql_query, {"ensemblId": target_id})
     target = data.get("target")
     if not target:
-        return {"error": "Target not found."}
+        raise ValueError("Target not found.")
     
-    return {
-        "symbol": target["approvedSymbol"],
-        "liabilities": target.get("safetyLiabilities", [])
-    }
+    return SafetyProfileResponse(
+        symbol=target["approvedSymbol"],
+        liabilities=target.get("safetyLiabilities", [])
+    )
 
-async def get_tractability_summary(target_id: str):
+async def get_tractability_summary(target_id: str) -> TractabilityResponse:
     """Returns the tractability (druggability) assessment for a target."""
     gql_query = """
     query TargetTractability($ensemblId: String!) {
@@ -45,14 +46,14 @@ async def get_tractability_summary(target_id: str):
     data = await query_graphql(gql_query, {"ensemblId": target_id})
     target = data.get("target")
     if not target:
-        return {"error": "Target not found."}
+        raise ValueError("Target not found.")
     
-    return {
-        "symbol": target["approvedSymbol"],
-        "tractability": target.get("tractability", [])
-    }
+    return TractabilityResponse(
+        symbol=target["approvedSymbol"],
+        tractability=target.get("tractability", [])
+    )
 
-async def get_drug_adverse_events(drug_id: str):
+async def get_drug_adverse_events(drug_id: str) -> AdverseEventsResponse:
     """Retrieves FDA FAERS pharmacovigilance data for a drug."""
     gql_query = """
     query DrugAdverseEvents($chemblId: String!) {
@@ -61,7 +62,7 @@ async def get_drug_adverse_events(drug_id: str):
         adverseEvents {
           count
           rows {
-            event
+            name
             meddraCode
             logLR
           }
@@ -72,12 +73,12 @@ async def get_drug_adverse_events(drug_id: str):
     data = await query_graphql(gql_query, {"chemblId": drug_id})
     drug = data.get("drug")
     if not drug:
-        return {"error": "Drug not found."}
+        raise ValueError("Drug not found.")
     
     events = drug.get("adverseEvents", {})
-    return {
-        "drug": drug["name"],
-        "total_adverse_events": events.get("count", 0),
-        "top_events": [{"name": r["event"], "meddraCode": r["meddraCode"], "logLR": r["logLR"]} 
-                      for r in events.get("rows", [])[:25]]
-    }
+    return AdverseEventsResponse(
+        drug=drug["name"],
+        total_adverse_events=events.get("count", 0),
+        top_events=[{"name": r["name"], "meddraCode": r["meddraCode"], "logLR": r["logLR"]} 
+                    for r in events.get("rows", [])[:25]]
+    )
